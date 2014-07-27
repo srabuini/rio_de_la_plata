@@ -28,7 +28,7 @@ function degToText(deg) {
   } else if (deg == 315) {
     return "NW";
   } else if (deg > 315 && deg < 360) {
-    return "NWN";
+    return "NNW";
   } else if (deg == 360) {
     return "N";
   }
