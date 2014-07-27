@@ -61,11 +61,7 @@ static void send_cmd(void) {
   app_message_outbox_send();
 }
 
-
-static void init(void) {
-  // Create a window
-  window = window_create();
-
+static void window_load(Window *window) {
   // Create the Time text_layer
   time_layer = text_layer_create(GRect(0, 0, 144, 56));
   text_layer_set_text_alignment(time_layer, GTextAlignmentCenter);
@@ -119,7 +115,7 @@ static void init(void) {
   window_stack_push(window, true);
 }
 
-static void deinit(void) {
+static void window_unload(Window *window) {
   // Deinit sync
   app_sync_deinit(&sync);
 
@@ -136,7 +132,22 @@ static void deinit(void) {
   // Destroy the wind_direction_layer
   text_layer_destroy(wind_direction_layer);
   inverter_layer_destroy(inverter_wind_direction);
+}
 
+static void init(void) {
+  // Create a window
+  window = window_create();
+
+  window_set_window_handlers(window, (WindowHandlers) {
+    .load = window_load,
+    .unload = window_unload,
+  });
+
+  const bool animated = true;
+  window_stack_push(window, animated);
+}
+
+static void deinit(void) {
   // Destroy the window
   window_destroy(window);
 }
