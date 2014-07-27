@@ -20,7 +20,9 @@ enum WeatherKey {
   TEMP_AND_LEVEL_KEY = 0x2, // TUPLE_CSTRING
 };
 
-static void sync_error_callback(DictionaryResult dict_error, AppMessageResult app_message_error, void *context) {
+static void sync_error_callback(DictionaryResult dict_error,
+                                AppMessageResult app_message_error,
+                                void *context) {
   APP_LOG(APP_LOG_LEVEL_DEBUG, "App Message Sync Error: %d", app_message_error);
 }
 
@@ -77,7 +79,8 @@ static void window_load(Window *window) {
   // Create the Time text_layer
   time_layer = text_layer_create(GRect(0, 0, 144, 56));
   text_layer_set_text_alignment(time_layer, GTextAlignmentCenter);
-  text_layer_set_font(time_layer, fonts_get_system_font(FONT_KEY_ROBOTO_BOLD_SUBSET_49));
+  text_layer_set_font(time_layer,
+                      fonts_get_system_font(FONT_KEY_ROBOTO_BOLD_SUBSET_49));
   layer_add_child(root_layer, text_layer_get_layer(time_layer));
 
   inverter_time = inverter_layer_create(GRect(0, 0, 144, 56));
@@ -86,11 +89,13 @@ static void window_load(Window *window) {
   // Create the Wind Direction text_layer
   wind_direction_layer = text_layer_create(GRect(0, 56, 144, 56));
   text_layer_set_text_alignment(wind_direction_layer, GTextAlignmentCenter);
-  text_layer_set_font(wind_direction_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD ));
+  text_layer_set_font(wind_direction_layer,
+                      fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD ));
   layer_add_child(root_layer, text_layer_get_layer(wind_direction_layer));
 
   inverter_wind_direction = inverter_layer_create(GRect(0, 56, 144, 56));
-  layer_add_child(root_layer, inverter_layer_get_layer(inverter_wind_direction));
+  layer_add_child(root_layer,
+                  inverter_layer_get_layer(inverter_wind_direction));
 
   inverter_panel = inverter_layer_create(GRect(0, 112, 144, 56));
   layer_add_child(root_layer, inverter_layer_get_layer(inverter_panel));
@@ -105,13 +110,15 @@ static void window_load(Window *window) {
   // Create the Wind text_layer
   wind_layer = text_layer_create(GRect(8, 112, 128, 24));
   text_layer_set_text_alignment(wind_layer, GTextAlignmentCenter);
-  text_layer_set_font(wind_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD ));
+  text_layer_set_font(wind_layer,
+                      fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD ));
   layer_add_child(root_layer, text_layer_get_layer(wind_layer));
 
   // Create the temp_and_level text_layer
   temp_and_level_layer = text_layer_create(GRect(8, 136, 128, 24));
   text_layer_set_text_alignment(temp_and_level_layer, GTextAlignmentCenter);
-  text_layer_set_font(temp_and_level_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
+  text_layer_set_font(temp_and_level_layer,
+                      fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
   layer_add_child(root_layer, text_layer_get_layer(temp_and_level_layer));
 
   // Subscribe to tick_timer_service
@@ -128,7 +135,8 @@ static void window_load(Window *window) {
     TupletCString(TEMP_AND_LEVEL_KEY, "0\u00B0C | 0m")
   };
 
-  app_sync_init(&sync, sync_buffer, sizeof(sync_buffer), initial_values, ARRAY_LENGTH(initial_values),
+  app_sync_init(&sync, sync_buffer, sizeof(sync_buffer), initial_values,
+                ARRAY_LENGTH(initial_values),
     sync_tuple_changed_callback, sync_error_callback, NULL);
 
   send_cmd();
