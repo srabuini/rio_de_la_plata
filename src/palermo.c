@@ -5,9 +5,11 @@ static TextLayer *time_layer;
 static TextLayer *wind_layer;
 static TextLayer *wind_direction_layer;
 static TextLayer *temp_and_level_layer;
+static Layer *rounded_layer;
 
 static InverterLayer *inverter_time;
 static InverterLayer *inverter_wind_direction;
+static InverterLayer *inverter_panel;
 
 static AppSync sync;
 static uint8_t sync_buffer[64];
@@ -61,36 +63,54 @@ static void send_cmd(void) {
   app_message_outbox_send();
 }
 
+static void rounded_layer_update_callback(Layer *me, GContext *ctx) {
+  graphics_context_set_fill_color(ctx, GColorWhite);
+  graphics_context_set_stroke_color(ctx, GColorBlack);
+  graphics_fill_rect(ctx, GRect(0, 112, 144, 56), 6, GCornersAll);
+}
+
 static void window_load(Window *window) {
+  Layer *root_layer = window_get_root_layer(window);
+
   // Create the Time text_layer
   time_layer = text_layer_create(GRect(0, 0, 144, 56));
   text_layer_set_text_alignment(time_layer, GTextAlignmentCenter);
   text_layer_set_font(time_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_MEDIUM_NUMBERS));
-  layer_add_child(window_get_root_layer(window), text_layer_get_layer(time_layer));
+  layer_add_child(root_layer, text_layer_get_layer(time_layer));
 
   inverter_time = inverter_layer_create(GRect(0, 0, 144, 56));
-  layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(inverter_time));
+  layer_add_child(root_layer, inverter_layer_get_layer(inverter_time));
 
   // Create the Wind Direction text_layer
   wind_direction_layer = text_layer_create(GRect(0, 56, 144, 56));
   text_layer_set_text_alignment(wind_direction_layer, GTextAlignmentCenter);
   text_layer_set_font(wind_direction_layer, fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD ));
-  layer_add_child(window_get_root_layer(window), text_layer_get_layer(wind_direction_layer));
+  layer_add_child(root_layer, text_layer_get_layer(wind_direction_layer));
 
   inverter_wind_direction = inverter_layer_create(GRect(0, 56, 144, 56));
-  layer_add_child(window_get_root_layer(window), inverter_layer_get_layer(inverter_wind_direction));
+  layer_add_child(root_layer, inverter_layer_get_layer(inverter_wind_direction));
+
+  inverter_panel = inverter_layer_create(GRect(0, 112, 144, 56));
+  layer_add_child(root_layer, inverter_layer_get_layer(inverter_panel));
+
+  Layer *window_layer = root_layer;
+  GRect frame = layer_get_frame(window_layer);
+
+  rounded_layer = layer_create(frame);
+  layer_set_update_proc(rounded_layer, rounded_layer_update_callback);
+  layer_add_child(window_layer, rounded_layer);
 
   // Create the Wind text_layer
-  wind_layer = text_layer_create(GRect(0, 112, 144, 28));
+  wind_layer = text_layer_create(GRect(8, 112, 128, 24));
   text_layer_set_text_alignment(wind_layer, GTextAlignmentCenter);
   text_layer_set_font(wind_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD ));
-  layer_add_child(window_get_root_layer(window), text_layer_get_layer(wind_layer));
+  layer_add_child(root_layer, text_layer_get_layer(wind_layer));
 
   // Create the temp_and_level text_layer
-  temp_and_level_layer = text_layer_create(GRect(0, 140, 144, 28));
+  temp_and_level_layer = text_layer_create(GRect(8, 136, 128, 24));
   text_layer_set_text_alignment(temp_and_level_layer, GTextAlignmentCenter);
   text_layer_set_font(temp_and_level_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
-  layer_add_child(window_get_root_layer(window), text_layer_get_layer(temp_and_level_layer));
+  layer_add_child(root_layer, text_layer_get_layer(temp_and_level_layer));
 
   // Subscribe to tick_timer_service
   tick_timer_service_subscribe(MINUTE_UNIT, handle_timechanges);
@@ -119,6 +139,8 @@ static void window_unload(Window *window) {
   // Deinit sync
   app_sync_deinit(&sync);
 
+  layer_destroy(rounded_layer);
+
   // Destroy the text layer
   text_layer_destroy(time_layer);
   inverter_layer_destroy(inverter_time);
@@ -128,6 +150,7 @@ static void window_unload(Window *window) {
 
   // Destroy the temp_and_level_layer
   text_layer_destroy(temp_and_level_layer);
+  inverter_layer_destroy(inverter_panel);
 
   // Destroy the wind_direction_layer
   text_layer_destroy(wind_direction_layer);
