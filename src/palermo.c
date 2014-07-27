@@ -45,7 +45,7 @@ static void sync_tuple_changed_callback(const uint32_t key,
 static void handle_timechanges(struct tm *tick_time, TimeUnits units_changed) {
   static char time_buffer[10];
 
-  strftime(time_buffer, sizeof(time_buffer), "%H:%M", tick_time);
+  strftime(time_buffer, sizeof(time_buffer), "%k:%M", tick_time);
   text_layer_set_text(time_layer, time_buffer);
 }
 
