@@ -4,7 +4,7 @@ function degToText(deg) {
   } else if (deg == 45) {
     return "NE";
   } else if (deg > 45 && deg < 90) {
-    return "NEE";
+    return "ENE";
   } else if (deg == 90) {
     return "E";
   } else if (deg > 90 && deg < 135) {
@@ -12,7 +12,7 @@ function degToText(deg) {
   } else if (deg == 135) {
     return "SE";
   } else if (deg > 135 && deg < 180) {
-    return "SES";
+    return "SSE";
   } else if (deg == 180) {
     return "S";
   } else if (deg > 180 && deg < 225) {
@@ -20,7 +20,7 @@ function degToText(deg) {
   } else if (deg == 225) {
     return "SW";
   } else if (deg > 225 && deg < 270) {
-    return "SWW";
+    return "WSW";
   } else if (deg == 270) {
     return "W";
   } else if (deg > 270 && deg < 315) {
