@@ -1,0 +1,23 @@
+{
+    "appKeys": {
+        "temp_and_level": 2,
+        "wind_direction": 0,
+        "wind_speed": 1
+    },
+    "capabilities": [
+        ""
+    ],
+    "companyName": "WasabitLabs",
+    "longName": "Rio de la Plata",
+    "projectType": "native",
+    "resources": {
+        "media": []
+    },
+    "shortName": "Rio de la Plata",
+    "uuid": "54516f78-a70d-4c8d-8e24-4136bafc9137",
+    "versionCode": 1,
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": true
+    }
+}
