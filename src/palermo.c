@@ -62,7 +62,7 @@ static void send_cmd(void) {
 }
 
 
-static void handle_init(void) {
+static void init(void) {
   // Create a window
   window = window_create();
 
@@ -119,7 +119,7 @@ static void handle_init(void) {
   window_stack_push(window, true);
 }
 
-static void handle_deinit(void) {
+static void deinit(void) {
   // Deinit sync
   app_sync_deinit(&sync);
 
@@ -142,7 +142,7 @@ static void handle_deinit(void) {
 }
 
 int main(void) {
-  handle_init();
+  init();
   app_event_loop();
-  handle_deinit();
+  deinit();
 }
