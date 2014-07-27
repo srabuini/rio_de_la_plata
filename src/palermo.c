@@ -75,7 +75,7 @@ static void window_load(Window *window) {
   // Create the Time text_layer
   time_layer = text_layer_create(GRect(0, 0, 144, 56));
   text_layer_set_text_alignment(time_layer, GTextAlignmentCenter);
-  text_layer_set_font(time_layer, fonts_get_system_font(FONT_KEY_BITHAM_42_MEDIUM_NUMBERS));
+  text_layer_set_font(time_layer, fonts_get_system_font(FONT_KEY_ROBOTO_BOLD_SUBSET_49));
   layer_add_child(root_layer, text_layer_get_layer(time_layer));
 
   inverter_time = inverter_layer_create(GRect(0, 0, 144, 56));
