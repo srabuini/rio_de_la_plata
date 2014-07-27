@@ -11,7 +11,14 @@
     "longName": "Rio de la Plata",
     "projectType": "native",
     "resources": {
-        "media": []
+        "media": [
+            {
+                "file": "images/palermo.png",
+                "menuIcon": true,
+                "name": "APP_SCREENSHOT",
+                "type": "png"
+            }
+        ]
     },
     "shortName": "Rio de la Plata",
     "uuid": "54516f78-a70d-4c8d-8e24-4136bafc9137",
