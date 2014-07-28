@@ -1,8 +1,8 @@
 {
     "appKeys": {
-        "temp_and_level": 2,
         "wind_direction": 0,
-        "wind_speed": 1
+        "wind_speed": 1,
+        "temp_and_level": 2
     },
     "capabilities": [
         ""
