@@ -9,7 +9,6 @@ static Layer *rounded_layer;
 
 static InverterLayer *inverter_time;
 static InverterLayer *inverter_wind_direction;
-static InverterLayer *inverter_panel;
 
 static AppSync sync;
 static uint8_t sync_buffer[64];
@@ -97,9 +96,6 @@ static void window_load(Window *window) {
   layer_add_child(root_layer,
                   inverter_layer_get_layer(inverter_wind_direction));
 
-  inverter_panel = inverter_layer_create(GRect(0, 112, 144, 56));
-  layer_add_child(root_layer, inverter_layer_get_layer(inverter_panel));
-
   Layer *window_layer = root_layer;
   GRect frame = layer_get_frame(window_layer);
 
@@ -141,6 +137,8 @@ static void window_load(Window *window) {
 
   send_cmd();
 
+  window_set_background_color(window, GColorBlack);
+
   // Push the window
   window_stack_push(window, true);
 }
@@ -160,7 +158,6 @@ static void window_unload(Window *window) {
 
   // Destroy the temp_and_level_layer
   text_layer_destroy(temp_and_level_layer);
-  inverter_layer_destroy(inverter_panel);
 
   // Destroy the wind_direction_layer
   text_layer_destroy(wind_direction_layer);
