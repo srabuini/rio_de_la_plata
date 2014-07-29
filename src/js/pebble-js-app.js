@@ -47,7 +47,7 @@ function fetchData() {
           temp_and_level = response.temp + '\u00B0C ' + response.level + 'm';
           wind_speed = response.wind_speed;
           splited_wind = wind_speed.split('|');
-          wind_speed = splited_wind[1] + 'kt | ' + splited_wind[0] + 'Km/h';
+          wind_speed = splited_wind[1] + 'kt ' + splited_wind[0] + 'Km/h';
           wind_direction = response.wind_direction;
           wind_direction = wind_direction + '\u00B0 ' + degToText(wind_direction);
           console.log(temp_and_level);
