@@ -126,9 +126,9 @@ static void window_load(Window *window) {
   app_message_open(inbound_size, outbound_size);
 
   Tuplet initial_values[] = {
-    TupletCString(WIND_DIRECTION_KEY, "0\u00B0 N"),
-    TupletCString(WIND_SPEED_KEY, "0kt | 0km/h"),
-    TupletCString(TEMP_AND_LEVEL_KEY, "0\u00B0C | 0m")
+    TupletCString(WIND_DIRECTION_KEY, "-\u00B0 ---"),
+    TupletCString(WIND_SPEED_KEY, "-kt -km/h"),
+    TupletCString(TEMP_AND_LEVEL_KEY, "-\u00B0C | -m")
   };
 
   app_sync_init(&sync, sync_buffer, sizeof(sync_buffer), initial_values,
