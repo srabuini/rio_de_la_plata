@@ -37,7 +37,7 @@ function degToText(deg) {
 function fetchData() {
   var response;
   var req = new XMLHttpRequest();
-  req.open('GET', "http://parking.wasabitlabs.com/palermo");
+  req.open('GET', "http://weather.wasabitlabs.com/palermo");
   req.onload = function(e) {
     if (req.readyState == 4) {
       if(req.status == 200) {
