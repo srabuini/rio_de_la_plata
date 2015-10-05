@@ -5,18 +5,17 @@ static TextLayer *time_layer;
 static TextLayer *wind_layer;
 static TextLayer *wind_direction_layer;
 static TextLayer *temp_and_level_layer;
+static TextLayer *last_update_layer;
 static Layer *rounded_layer;
 
-static InverterLayer *inverter_time;
-static InverterLayer *inverter_wind_direction;
-
 static AppSync sync;
-static uint8_t sync_buffer[64];
+static uint8_t sync_buffer[128];
 
 enum WeatherKey {
-  WIND_DIRECTION_KEY = 0x0, // TUPLE_CSTRING
-  WIND_SPEED_KEY = 0x1,     // TUPLE_CSTRING
-  TEMP_AND_LEVEL_KEY = 0x2, // TUPLE_CSTRING
+  WIND_DIRECTION_KEY = 0x0,
+  WIND_SPEED_KEY = 0x1,
+  TEMP_AND_LEVEL_KEY = 0x2,
+  LAST_UPDATE_KEY = 0x3
 };
 
 static void sync_error_callback(DictionaryResult dict_error,
@@ -28,6 +27,7 @@ static void sync_error_callback(DictionaryResult dict_error,
 static void sync_tuple_changed_callback(const uint32_t key,
                                         const Tuple *new_tuple,
                                         const Tuple *old_tuple, void *context) {
+  APP_LOG(APP_LOG_LEVEL_DEBUG, "received: %lu", key);
   switch (key) {
     case WIND_DIRECTION_KEY:
       text_layer_set_text(wind_direction_layer, new_tuple->value->cstring);
@@ -39,6 +39,10 @@ static void sync_tuple_changed_callback(const uint32_t key,
 
     case TEMP_AND_LEVEL_KEY:
       text_layer_set_text(temp_and_level_layer, new_tuple->value->cstring);
+      break;
+    
+    case LAST_UPDATE_KEY:
+      text_layer_set_text(last_update_layer, new_tuple->value->cstring);
       break;
   }
 }
@@ -77,24 +81,31 @@ static void window_load(Window *window) {
 
   // Create the Time text_layer
   time_layer = text_layer_create(GRect(0, 0, 144, 56));
+  text_layer_set_background_color(time_layer, GColorBlack);
+  text_layer_set_text_color(time_layer, GColorWhite);
   text_layer_set_text_alignment(time_layer, GTextAlignmentCenter);
   text_layer_set_font(time_layer,
                       fonts_get_system_font(FONT_KEY_ROBOTO_BOLD_SUBSET_49));
   layer_add_child(root_layer, text_layer_get_layer(time_layer));
 
-  inverter_time = inverter_layer_create(GRect(0, 0, 144, 56));
-  layer_add_child(root_layer, inverter_layer_get_layer(inverter_time));
-
   // Create the Wind Direction text_layer
-  wind_direction_layer = text_layer_create(GRect(0, 56, 144, 56));
+  wind_direction_layer = text_layer_create(GRect(0, 56, 144, 28));
+  text_layer_set_background_color(wind_direction_layer, GColorBlack);
+  text_layer_set_text_color(wind_direction_layer, GColorWhite);
   text_layer_set_text_alignment(wind_direction_layer, GTextAlignmentCenter);
   text_layer_set_font(wind_direction_layer,
                       fonts_get_system_font(FONT_KEY_GOTHIC_28_BOLD ));
   layer_add_child(root_layer, text_layer_get_layer(wind_direction_layer));
 
-  inverter_wind_direction = inverter_layer_create(GRect(0, 56, 144, 56));
-  layer_add_child(root_layer,
-                  inverter_layer_get_layer(inverter_wind_direction));
+  // Create the last_update text_layer
+  last_update_layer = text_layer_create(GRect(0, 88, 144, 16));
+  text_layer_set_background_color(last_update_layer, GColorBlack);
+  text_layer_set_text_color(last_update_layer, GColorWhite);
+  text_layer_set_text_alignment(last_update_layer, GTextAlignmentCenter);
+  text_layer_set_text(last_update_layer, "_-_ -:-");
+  text_layer_set_font(last_update_layer,
+                      fonts_get_system_font(FONT_KEY_GOTHIC_14 ));
+  layer_add_child(root_layer, text_layer_get_layer(last_update_layer));
 
   Layer *window_layer = root_layer;
   GRect frame = layer_get_frame(window_layer);
@@ -128,7 +139,8 @@ static void window_load(Window *window) {
   Tuplet initial_values[] = {
     TupletCString(WIND_DIRECTION_KEY, "-\u00B0 ---"),
     TupletCString(WIND_SPEED_KEY, "-kt -km/h"),
-    TupletCString(TEMP_AND_LEVEL_KEY, "-\u00B0C | -m")
+    TupletCString(TEMP_AND_LEVEL_KEY, "-\u00B0C | -m"),
+    TupletCString(LAST_UPDATE_KEY, "_-_ -:-")
   };
 
   app_sync_init(&sync, sync_buffer, sizeof(sync_buffer), initial_values,
@@ -151,7 +163,6 @@ static void window_unload(Window *window) {
 
   // Destroy the text layer
   text_layer_destroy(time_layer);
-  inverter_layer_destroy(inverter_time);
 
   // Destroy the wind_layer
   text_layer_destroy(wind_layer);
@@ -161,12 +172,14 @@ static void window_unload(Window *window) {
 
   // Destroy the wind_direction_layer
   text_layer_destroy(wind_direction_layer);
-  inverter_layer_destroy(inverter_wind_direction);
+  
+  text_layer_destroy(last_update_layer);
 }
 
 static void init(void) {
   // Create a window
   window = window_create();
+  window_set_background_color(window, GColorBlack);
 
   window_set_window_handlers(window, (WindowHandlers) {
     .load = window_load,

@@ -1,5 +1,6 @@
 {
     "appKeys": {
+        "last_update": 3,
         "temp_and_level": 2,
         "wind_direction": 0,
         "wind_speed": 1
@@ -19,9 +20,10 @@
             }
         ]
     },
+    "sdkVersion": "2",
     "shortName": "Rio de la Plata",
     "uuid": "54516f78-a70d-4c8d-8e24-4136bafc9137",
-    "versionCode": 3,
+    "versionCode": 1,
     "versionLabel": "1.1",
     "watchapp": {
         "watchface": true
