@@ -24,7 +24,7 @@
     "shortName": "Rio de la Plata",
     "uuid": "54516f78-a70d-4c8d-8e24-4136bafc9137",
     "versionCode": 1,
-    "versionLabel": "1.2",
+    "versionLabel": "1.3",
     "watchapp": {
         "watchface": true
     }

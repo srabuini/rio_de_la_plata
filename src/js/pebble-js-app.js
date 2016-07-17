@@ -25,12 +25,12 @@ function fetchData() {
             last_update;
 
         if (response) {
-          temp_and_level = response.temp + " " + response.level + 'm';
+          temp_and_level = response.temp + "\u00B0C " + response.level + 'm';
           wind_speed = response.wind_speed;
           splited_wind = wind_speed.split('|');
           wind_speed = splited_wind[1] + 'kt ' + splited_wind[0] + 'Km/h';
           wind_direction = response.wind_direction;
-          wind_direction = wind_direction + " " + degToText(wind_direction);
+          wind_direction = wind_direction + "\u00B0 " + degToText(wind_direction);
           timestamp = formatedDate(response.timestamp * 1000);
           last_update = formatedDate(response.last_update * 1000);
 
